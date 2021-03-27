@@ -13,7 +13,7 @@ class DefaultScene extends Phaser.Scene {
         this.input.mouse.capture = true;
         entry = this.add.bitmapText(5, 5, "retro", "You are a newborn sprout.\nGrow like nothing has ever grown", 15);
 
-        this.addTreeValue("height", "m", 0.005, 0.010);   
+        this.addTreeValue("height", "m",);   
     }
 
 
@@ -29,31 +29,21 @@ class DefaultScene extends Phaser.Scene {
         let counter = 0;
         for(var key in treeVariables)
         {
-            if(treeVariables[key].value <= treeVariables[key].cap)
+            if(treeVariables[key].value.toFixed(3) <= treeVariables[key].cap)
             {
-                if(treeVariables[key].value + treeVariables[key].addValue > treeVariables[key].cap)
+                if(treeVariables[key].value.toFixed(3) < treeVariables[key].cap)
                 {
-                    let addValB = (treeVariables[key].value + treeVariables[key].addValue) - (treeVariables[key].value + treeVariables[key].addValue - treeVariables[key].cap);
-                    console.log(addValB);
-                    treeVariables[key].value += addValB;
+                    treeVariables[key].value += treeVariables[key].speed;    
                 }
-                else if (treeVariables[key].value + treeVariables[key].speed > treeVariables[key].cap)
-                {
-
-                }
-                else
-                {
-                    treeVariables[key].value += treeVariables[key].speed;
-                    var value = treeVariables[key].value + treeVariables[key].speed;    
-                }
-                activeProperties[counter].text = key + ": " + value.toFixed(3) + " / " + treeVariables[key].cap + " " + treeVariables[key].mUnit;
+                activeProperties[counter].text = key + ": " + treeVariables[key].value.toFixed(3) + " / " + treeVariables[key].cap + " " + treeVariables[key].mUnit;
                 counter++;
+                console.log(treeVariables[key].value.toFixed(3));
             }
         }
     }
 
     /** Create and add a new property to treeVariables and initialize his bitmapText and button (if needed) */
-    addTreeValue(name, mUnit, value = 0, addValue = 1, speed = 0, cap = 0.3, color = "", hasButton = true)
+    addTreeValue(name, mUnit, cap = 0.3, value = 0, addValue = cap / 10, speed = 0, color = "", hasButton = true)
     {
         treeVariables[name] = new Property(name, mUnit, value, addValue, speed, cap, color, hasButton);   
         
@@ -89,6 +79,10 @@ class DefaultScene extends Phaser.Scene {
             });
         }
     }
+
+    round(value, decimals) {
+        return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+      }
 }
 
     
