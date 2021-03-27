@@ -1,6 +1,5 @@
 var entry;
 
-
 class DefaultScene extends Phaser.Scene {
 
     constructor() {
@@ -32,29 +31,30 @@ class DefaultScene extends Phaser.Scene {
         {
             treeVariables[key].value += treeVariables[key].speed;
             var value = treeVariables[key].value + treeVariables[key].speed;
-            activeProperties[counter].text = key + ": " + value.toFixed(3) + " " + treeVariables[key].mUnit;
+            activeProperties[counter].text = key + ": " + value.toFixed(3) + " / " + treeVariables[key].cap + " " + treeVariables[key].mUnit;
             counter++;
         }
     }
 
     /** Create and add a new property to treeVariables and initialize his bitmapText and button (if needed) */
-    addTreeValue(name, mUnit, value = 0, addValue = 1, speed = 0, color = "", hasButton = true)
+    addTreeValue(name, mUnit, value = 0, addValue = 1, speed = 0, cap = 10, color = "", hasButton = true)
     {
-        treeVariables[name] = new Property(name, mUnit, value, addValue, speed, color, hasButton);   
+        treeVariables[name] = new Property(name, mUnit, value, addValue, speed, cap, color, hasButton);   
         
         this.addActiveProperty( treeVariables[name].name, 
-                                treeVariables[name].value, 
+                                treeVariables[name].value,
+                                treeVariables[name].cap, 
                                 treeVariables[name].mUnit, 
                                 treeVariables[name].addValue);
     }
 
     /** Create, display and save in activeProperties a new bitmapText. Create also his button if needed */
-    addActiveProperty(name, value, mUnit, addValue, color= "")
+    addActiveProperty(name, value, cap, mUnit, addValue, color= "")
     {
         activeProperties.push(this.add.bitmapText(  treePropertiesStartingWidth, 
-                                                    treePropertiesStartingHeight  += propertiesSpacing, 
+                                                    treePropertiesStartingHeight += propertiesSpacing, 
                                                     "retro" + color, 
-                                                    name + ": " + value + " " + mUnit,
+                                                    name + ": " + value + " / " + cap + " " + mUnit,
                                                      15
                                                 ));
         

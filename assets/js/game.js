@@ -7,9 +7,8 @@ var gameOptions = {
     viewPortWidth: window.innerWidth,
     viewPortHeight: window.innerHeight,
 }
-/** contiene i key binding per i controlli del nostro gioco */
-var cursors;
-/** contiene la musica tra le scene  */
+
+/** Contains music between scenes  */
 var gameMusic;
 
 var activeProperties = [];
@@ -23,7 +22,7 @@ window.onload = function() {
         scale: {
             mode: Phaser.Scale.FIT,
             autoCenter: Phaser.Scale.CENTER_BOTH,
-            /**  MODIFICO LE DIMENSIONI */
+            /**  Here I change dimensions */
             width: gameOptions.viewPortWidth,
             height: gameOptions.viewPortHeight
         },
@@ -34,7 +33,7 @@ window.onload = function() {
                 debug: false
             }
         },
-        scene: [Resources, DefaultScene, GameHud, PauseMenu],
+        scene: [Resources, DefaultScene, GameHud],
         backgroundColor: 0x2b2b2b,
     };
 

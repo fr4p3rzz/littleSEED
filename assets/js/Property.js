@@ -1,10 +1,11 @@
 class Property{
-    constructor(name, mUnit, value = 0, addValue = 1, speed = 0, color = "", hasButton = true){
+    constructor(name, mUnit, value, addValue, speed, cap, color, hasButton){
         this.name = name;
         this.mUnit = mUnit;
         this.value = value;
         this.addValue = addValue;
         this.speed = speed;
+        this.cap = cap;
         this.color = color;
         this.hasButton = hasButton;   
     }
@@ -20,6 +21,7 @@ class Property{
                                     value: this.value, 
                                     addValue: this.addValue, 
                                     speed: this.speed, 
+                                    cap: this.cap,
                                     color: this.color, 
                                     hasButton: this.hasButton
                                 };          
