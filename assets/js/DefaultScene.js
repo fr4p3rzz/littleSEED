@@ -29,15 +29,31 @@ class DefaultScene extends Phaser.Scene {
         let counter = 0;
         for(var key in treeVariables)
         {
-            treeVariables[key].value += treeVariables[key].speed;
-            var value = treeVariables[key].value + treeVariables[key].speed;
-            activeProperties[counter].text = key + ": " + value.toFixed(3) + " / " + treeVariables[key].cap + " " + treeVariables[key].mUnit;
-            counter++;
+            if(treeVariables[key].value <= treeVariables[key].cap)
+            {
+                if(treeVariables[key].value + treeVariables[key].addValue > treeVariables[key].cap)
+                {
+                    let addValB = (treeVariables[key].value + treeVariables[key].addValue) - (treeVariables[key].value + treeVariables[key].addValue - treeVariables[key].cap);
+                    console.log(addValB);
+                    treeVariables[key].value += addValB;
+                }
+                else if (treeVariables[key].value + treeVariables[key].speed > treeVariables[key].cap)
+                {
+
+                }
+                else
+                {
+                    treeVariables[key].value += treeVariables[key].speed;
+                    var value = treeVariables[key].value + treeVariables[key].speed;    
+                }
+                activeProperties[counter].text = key + ": " + value.toFixed(3) + " / " + treeVariables[key].cap + " " + treeVariables[key].mUnit;
+                counter++;
+            }
         }
     }
 
     /** Create and add a new property to treeVariables and initialize his bitmapText and button (if needed) */
-    addTreeValue(name, mUnit, value = 0, addValue = 1, speed = 0, cap = 10, color = "", hasButton = true)
+    addTreeValue(name, mUnit, value = 0, addValue = 1, speed = 0, cap = 0.3, color = "", hasButton = true)
     {
         treeVariables[name] = new Property(name, mUnit, value, addValue, speed, cap, color, hasButton);   
         
