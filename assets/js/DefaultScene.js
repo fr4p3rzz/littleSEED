@@ -1,4 +1,5 @@
-var entry
+var entry;
+var scene;
 var weatherFeedback;
 
 class DefaultScene extends Phaser.Scene {
@@ -9,6 +10,7 @@ class DefaultScene extends Phaser.Scene {
 
     preload()
     {
+        scene = this.scene.get("DefaultScene");
         entry = this.add.bitmapText(5, 5, "retro", "You are a newborn sprout.\nGrow like nothing has ever grown", 15);
         weatherFeedback = this.add.bitmapText(innerWidth - 300 , 5, "retro", sunnyFeedback, 15);
 
@@ -21,23 +23,31 @@ class DefaultScene extends Phaser.Scene {
 
         /** all other properties */
         this.addTreeValue("leaves", "", {"sun_energy": 0.001}, 5, 0, 1, 0, "", true, false);   
+
+        
     }
 
 
     create() 
     {      
+        
         this.input.mouse.capture = true; 
 
         this.addActiveProperty("water", "l", 1, 0, 1 / 100000, "_cyan");   
         this.addActiveProperty("sun_energy", "J", 1, 0, 0.001, "_gold");  
+
+        document.getElementById("loadbutton").addEventListener("click",  function(){
+            
+            scene.rebuildActiveProperties();
+        });
     }
 
 
     update(){
+        
         this.setWeather();
         this.theConditionsLoop();
         this.theValuesLoop();
-
 
     }
 
@@ -80,8 +90,7 @@ class DefaultScene extends Phaser.Scene {
             if(!treeVariables[key].isSet)
             {
                 if(this.shouldSet(treeVariables[key].name))
-                {
-                    
+                {                   
                     this.addActiveProperty( treeVariables[key].name, 
                                             treeVariables[key].value,
                                             treeVariables[key].cap, 
@@ -140,7 +149,7 @@ class DefaultScene extends Phaser.Scene {
                                             );
                 button.setInteractive();
                 button.on('pointerdown', () => {
-                    this.isActionAffordable(treeVariables[name].name, treeVariables[name].addValue);                 
+                    this.isActionAffordable(name, addValue);                 
                 });
                 button.on('pointerover', () => {
                     button.setTexture( name + '_buttons', 1);
@@ -196,6 +205,38 @@ class DefaultScene extends Phaser.Scene {
             case "leaves": return this.setWater();
 
             default: return true;
+        }
+    }
+
+    rebuildActiveProperties()
+    {
+        for(let i = 0; i < activeProperties.length; i++)
+        {
+            activeProperties[i].destroy();
+        }
+
+        activeProperties = [];
+        treePropertiesStartingHeight = 65;
+        treePropertiesStartingWidth = 20;
+        treeButtonStartingWidth = 180;
+        treeButtonStartingHeight = 525;
+        propertiesSpacing = 20;
+        buttonSpacing = 70;
+        buttonCounter = -1;
+        buttonRows = 0;
+
+        for(var key in treeVariables)
+        {
+            if(treeVariables[key].isSet)
+            {
+                this.addActiveProperty( treeVariables[key].name, 
+                    treeVariables[key].value,
+                    treeVariables[key].cap, 
+                    treeVariables[key].mUnit, 
+                    treeVariables[key].addValue,
+                    treeVariables[key].color
+                );
+            }
         }
     }
 
