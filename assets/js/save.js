@@ -1,8 +1,12 @@
 function saveGame(treeVariables) {
-    document.cookie = treeVariables;
+    document.cookie = JSON.stringify(treeVariables);
     console.log(document.cookie);
+    console.log(treeVariables);
 }
 
 function loadGame(treeVariables){
-    treeVariables = document.cookie
+    treeVariables = JSON.parse(document.cookie)
+
+    console.log(document.cookie);
+    console.log(treeVariables);
 }
