@@ -24,12 +24,7 @@ class DefaultScene extends Phaser.Scene {
         /** all other properties */
         this.addTreeValue("leaves", "", {"sun_energy": 0.001}, 5, 0, 1, 0, "", true, false);   
 
-        document.getElementById("loadbutton").addEventListener("click",  function(){
-            console.log("we");
-            scene.rebuildActiveProperties();
-            console.log("wee");
-
-        });
+        
     }
 
 
@@ -40,6 +35,11 @@ class DefaultScene extends Phaser.Scene {
 
         this.addActiveProperty("water", "l", 1, 0, 1 / 100000, "_cyan");   
         this.addActiveProperty("sun_energy", "J", 1, 0, 0.001, "_gold");  
+
+        document.getElementById("loadbutton").addEventListener("click",  function(){
+            
+            scene.rebuildActiveProperties();
+        });
     }
 
 
@@ -48,7 +48,6 @@ class DefaultScene extends Phaser.Scene {
         this.setWeather();
         this.theConditionsLoop();
         this.theValuesLoop();
-
 
     }
 
@@ -116,7 +115,6 @@ class DefaultScene extends Phaser.Scene {
     /** Create, display and save in activeProperties a new bitmapText. Create also his button if needed */
     addActiveProperty(name, mUnit, cap, value, addValue, color= "")
     {
-        console.log("dentro l' active");
         activeProperties.push(this.add.bitmapText(  treePropertiesStartingWidth, 
                                                     treePropertiesStartingHeight += propertiesSpacing, 
                                                     "retro" + color, 
@@ -212,15 +210,25 @@ class DefaultScene extends Phaser.Scene {
 
     rebuildActiveProperties()
     {
-        console.log("weeee");
         for(let i = 0; i < activeProperties.length; i++)
         {
             activeProperties[i].destroy();
-            console.log("primo for");
         }
+
+        activeProperties = [];
+        treePropertiesStartingHeight = 65;
+        treePropertiesStartingWidth = 20;
+        treeButtonStartingWidth = 180;
+        treeButtonStartingHeight = 525;
+        propertiesSpacing = 20;
+        buttonSpacing = 70;
+        buttonCounter = -1;
+        buttonRows = 0;
+
         for(var key in treeVariables)
+        {
+            if(treeVariables[key].isSet)
             {
-                console.log("secondo for");
                 this.addActiveProperty( treeVariables[key].name, 
                     treeVariables[key].value,
                     treeVariables[key].cap, 
@@ -228,8 +236,8 @@ class DefaultScene extends Phaser.Scene {
                     treeVariables[key].addValue,
                     treeVariables[key].color
                 );
-                treeVariables[key].isSet = true;
             }
+        }
     }
 
     isActionAffordable(name, addValue){
