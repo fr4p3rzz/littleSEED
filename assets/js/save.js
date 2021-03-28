@@ -11,7 +11,7 @@ function saveInLocal(treeVariables){
 }
 
 function loadFromLocal(){
-    if(localStorage.getItem('little_seed_save')){
-        treeVariables = JSON.parse(localStorage.getItem('little_seed_save'));
+    if(window.localStorage.getItem('little_seed_save')){
+        treeVariables = JSON.parse(window.localStorage.getItem('little_seed_save'));
     } else { console.log('NOP') }
 }
