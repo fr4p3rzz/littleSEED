@@ -21,12 +21,12 @@ class DefaultScene extends Phaser.Scene {
         this.addTreeValue("water", "l", 1, 0, 1 / 100000, 0, "_cyan", false, true);   
         this.addTreeValue("sun_energy", "J", 1, 0, 0.001, 0, "_gold", true, true);   
         this.addTreeValue("leaves", "", 5, 0, 1, 0, "_gold", true, false);    
-
     }
 
 
     update(){
         this.setWeather();
+        this.theConditionsLoop();
         this.theValuesLoop();
 
 
@@ -60,6 +60,27 @@ class DefaultScene extends Phaser.Scene {
                     counter++;
                 }
             }          
+        }
+    }
+
+    theConditionsLoop()
+    {
+        for(var key in treeVariables)
+        {
+            if(!treeVariables[key].isSet)
+            {
+                if(this.shouldSet(treeVariables[key].name))
+                {
+                    this.addActiveProperty( treeVariables[key].name, 
+                                            treeVariables[key].value,
+                                            treeVariables[key].cap, 
+                                            treeVariables[key].mUnit, 
+                                            treeVariables[key].addValue,
+                                            treeVariables[key].color
+                                        );
+                    treeVariables[key].isSet = true;
+                }
+            }
         }
     }
 
@@ -167,15 +188,12 @@ class DefaultScene extends Phaser.Scene {
         }
     }
 
-    treeConditions(name, value){
-
-    }
-        
-}
-
-function test(name){
-    if(treeVariables[name] == water)
+    shouldSet(name)
     {
-        
+        switch(name)
+        {
+            case "leaves": if(treeVariables["sun_energy"].value >= 0.003){ return true;}
+                break;
+        }
     }
 }

@@ -8,8 +8,9 @@ var gameOptions = {
     viewPortHeight: window.innerHeight,
 }
 
-/** Contains music between scenes  */
-var gameMusic;
+/** ------------------------------ */
+/** Global variables for the game */
+/** ------------------------------ */
 
 var activeProperties = [];
 var treePropertiesStartingHeight = 65;
@@ -26,11 +27,22 @@ var rainyFeedback = "It's starting to gently rain";
 var sunnyFeedback = "It's a beautiful day, full of opportunities";
 var scorchingFeedback = "The sun is burning in the sky";
 
+/** ------------------------------ */
+/** Global functions for the game */
+/** ------------------------------ */
+
+/** return a random int included between min and max */
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min; //max and min are included
 }
+
+
+
+/** ------------------------------ */
+/** The game (you've lost) */
+/** ------------------------------ */
 
 window.onload = function() {
     var config = {
