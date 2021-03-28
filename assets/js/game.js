@@ -14,7 +14,12 @@ var gameMusic;
 var activeProperties = [];
 var treePropertiesStartingHeight = 65;
 var treePropertiesStartingWidth = 20;
+var treeButtonStartingWidth = 180;
+var treeButtonStartingHeight = 525;
 var propertiesSpacing = 20;
+var buttonSpacing = 70;
+var buttonCounter = -1;
+var buttonRows = 0;
 
 var stormyFeedback = "A storm is coming";
 var rainyFeedback = "It's starting to gently rain";
