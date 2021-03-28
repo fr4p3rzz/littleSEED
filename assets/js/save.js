@@ -1,3 +1,8 @@
-import './TreeVariables.'
+function saveGame(treeVariables) {
+    document.cookie = treeVariables;
+    console.log(document.cookie);
+}
 
-console.log()
+function loadGame(treeVariables){
+    treeVariables = document.cookie
+}
