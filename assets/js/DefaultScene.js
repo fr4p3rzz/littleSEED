@@ -36,7 +36,7 @@ class DefaultScene extends Phaser.Scene {
         this.addActiveProperty("water", "l", 1, 0, 1 / 100000, "_cyan");   
         this.addActiveProperty("sun_energy", "J", 1, 0, 0.001, "_gold");  
 
-        document.getElementById("loadbutton").addEventListener("click",  function(){
+        document.getElementById("localloadbutton").addEventListener("click",  function(){
             
             scene.rebuildActiveProperties();
         });
@@ -157,6 +157,8 @@ class DefaultScene extends Phaser.Scene {
                 button.on('pointerout', () => {
                     button.setTexture( name + '_buttons', 0);
                 });
+                
+                buttons.push(button);
             }
 
         }
@@ -214,6 +216,12 @@ class DefaultScene extends Phaser.Scene {
         {
             activeProperties[i].destroy();
         }
+
+        for(let i = 0; i < buttons.length; i++)
+        {
+            buttons[i].destroy();
+        }
+        buttons = [];
 
         activeProperties = [];
         treePropertiesStartingHeight = 65;

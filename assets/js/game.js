@@ -13,6 +13,7 @@ var gameOptions = {
 /** ------------------------------ */
 
 var activeProperties = [];
+var buttons = [];
 var treePropertiesStartingHeight = 65;
 var treePropertiesStartingWidth = 20;
 var treeButtonStartingWidth = 180;
