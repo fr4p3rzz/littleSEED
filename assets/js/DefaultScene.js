@@ -18,9 +18,9 @@ class DefaultScene extends Phaser.Scene {
 
         /** Here we initialize all the tree's properties */
         /** name, measure unit, value, addValue, speed, cap, color, hasButton, isSet */
-        this.addTreeValue("water", "l", 1, 0, 1 / 100000, 0, "_cyan", false, true);   
-        this.addTreeValue("sun_energy", "J", 1, 0, 0.001, 0, "_gold", true, true);   
-        this.addTreeValue("leaves", "", 5, 0, 1, 0, "_gold", true, false);    
+        this.addTreeValue("water", "l", 1, 0, 1 / 100000, 0, "_cyan", false, false);   
+        this.addTreeValue("sun_energy", "J", 1, 0, 0.001, 0, "_gold", true, false);   
+        this.addTreeValue("leaves", "", 5, 0, 1, 0, "", true, false);    
     }
 
 
@@ -65,6 +65,7 @@ class DefaultScene extends Phaser.Scene {
 
     theConditionsLoop()
     {
+        
         for(var key in treeVariables)
         {
             if(!treeVariables[key].isSet)
@@ -89,17 +90,7 @@ class DefaultScene extends Phaser.Scene {
      */
     addTreeValue(name, mUnit, cap = 1, value = 0, addValue = cap / 100, speed = 0, color = "", hasButton = false, isSet = false)
     {
-        treeVariables[name] = new Property(name, mUnit, value, addValue, speed, cap, color, hasButton, isSet);   
-        
-        if(treeVariables[name].isSet)
-        {
-            this.addActiveProperty( treeVariables[name].name, 
-                treeVariables[name].value,
-                treeVariables[name].cap, 
-                treeVariables[name].mUnit, 
-                treeVariables[name].addValue,
-                treeVariables[name].color);
-        }        
+        treeVariables[name] = new Property(name, mUnit, value, addValue, speed, cap, color, hasButton, isSet);         
     }
 
     /** Create, display and save in activeProperties a new bitmapText. Create also his button if needed */
@@ -132,20 +123,20 @@ class DefaultScene extends Phaser.Scene {
             }
             if(buttonRows < 8)
             {
-                this.button = this.add.sprite(  treeButtonStartingWidth, 
+                let button = this.add.sprite(  treeButtonStartingWidth, 
                                                 treeButtonStartingHeight += buttonSpacing, 
                                                 name + '_buttons', 
                                                 0
                                             );
-                this.button.setInteractive();
-                this.button.on('pointerdown', () => {
+                button.setInteractive();
+                button.on('pointerdown', () => {
                     treeVariables[name].value += addValue;
                 });
-                this.button.on('pointerover', () => {
-                    this.button.setTexture( name + '_buttons', 1);
+                button.on('pointerover', () => {
+                    button.setTexture( name + '_buttons', 1);
                 });
-                this.button.on('pointerout', () => {
-                    this.button.setTexture( name + '_buttons', 0);
+                button.on('pointerout', () => {
+                    button.setTexture( name + '_buttons', 0);
                 });
             }
 
@@ -194,6 +185,7 @@ class DefaultScene extends Phaser.Scene {
         {
             case "leaves": if(treeVariables["sun_energy"].value >= 0.003){ return true;}
                 break;
+                default: return true;
         }
     }
 }
