@@ -7,24 +7,29 @@ class DefaultScene extends Phaser.Scene {
         super("DefaultScene");
     }
 
-
-
-    create() 
-    {      
-
-        this.input.mouse.capture = true;
+    preload()
+    {
         entry = this.add.bitmapText(5, 5, "retro", "You are a newborn sprout.\nGrow like nothing has ever grown", 15);
         weatherFeedback = this.add.bitmapText(innerWidth - 300 , 5, "retro", sunnyFeedback, 15);
 
         /** Here we initialize all the tree's properties */
         /** name, measure unit, cap, value, addValue, speed, color, hasButton, isSet */
-        this.addTreeValue("water", "l", 1, 0, 1 / 100000, 0, "_cyan", false, true);   
+
+        /**properties initialized by default */
+        this.addTreeValue("water", "l", 0, 1, 0, 1 / 100000, 0, "_cyan", false, true);   
+        this.addTreeValue("sun_energy", "J", 0, 1, 0, 0.001, 0, "_gold", true, true);   
+
+        /** all other properties */
+        this.addTreeValue("leaves", "", {"sun_energy": 0.001}, 5, 0, 1, 0, "", true, false);   
+    }
+
+
+    create() 
+    {      
+        this.input.mouse.capture = true; 
+
         this.addActiveProperty("water", "l", 1, 0, 1 / 100000, "_cyan");   
-        this.addTreeValue("sun_energy", "J", 1, 0, 0.001, 0, "_gold", true, true);   
         this.addActiveProperty("sun_energy", "J", 1, 0, 0.001, "_gold");  
-        
-        /** next ones are not initialized by default */
-        this.addTreeValue("leaves", "", 5, 0, 1, 0, "", true, false);   
     }
 
 
@@ -76,6 +81,7 @@ class DefaultScene extends Phaser.Scene {
             {
                 if(this.shouldSet(treeVariables[key].name))
                 {
+                    
                     this.addActiveProperty( treeVariables[key].name, 
                                             treeVariables[key].value,
                                             treeVariables[key].cap, 
@@ -92,9 +98,9 @@ class DefaultScene extends Phaser.Scene {
     /** Create and add a new property to treeVariables and initialize his bitmapText and button (if needed)
      *  REMEMBER: value, addValue and speed MUST be 0 or multiples of cap.
      */
-    addTreeValue(name, mUnit, cap = 1, value = 0, addValue = cap / 100, speed = 0, color = "", hasButton = false, isSet = false)
+    addTreeValue(name, mUnit, costs, cap = 1, value = 0, addValue = cap / 100, speed = 0, color = "", hasButton = false, isSet = false)
     {
-        treeVariables[name] = new Property(name, mUnit, value, addValue, speed, cap, color, hasButton, isSet);         
+        treeVariables[name] = new Property(name, mUnit, costs, value, addValue, speed, cap, color, hasButton, isSet);         
     }
 
     /** Create, display and save in activeProperties a new bitmapText. Create also his button if needed */
@@ -134,7 +140,7 @@ class DefaultScene extends Phaser.Scene {
                                             );
                 button.setInteractive();
                 button.on('pointerdown', () => {
-                    treeVariables[name].value += addValue;
+                    this.isActionAffordable(treeVariables[name].name, treeVariables[name].addValue);                 
                 });
                 button.on('pointerover', () => {
                     button.setTexture( name + '_buttons', 1);
@@ -191,6 +197,35 @@ class DefaultScene extends Phaser.Scene {
 
             default: return true;
         }
+    }
+
+    isActionAffordable(name, addValue){
+        if(treeVariables[name].value < treeVariables[name].cap)
+        {
+            let canAffort = true;
+            if(treeVariables[name].costs != 0)
+            {
+                for(let key in treeVariables[name].costs)
+                {
+                    if(treeVariables[key].value >= treeVariables[name].costs[key])
+                    {
+                        treeVariables[key].value -= treeVariables[name].costs[key];
+                    }
+                    else
+                    {
+                        canAffort = false;
+                    }
+                }
+                if(canAffort)
+                {
+                    treeVariables[name].value += addValue;
+                }
+            }
+            else
+            {
+                treeVariables[name].value += addValue;
+            } 
+        }       
     }
  
     /** -------------------------------------------------------- */
