@@ -17,10 +17,14 @@ class DefaultScene extends Phaser.Scene {
         weatherFeedback = this.add.bitmapText(innerWidth - 300 , 5, "retro", sunnyFeedback, 15);
 
         /** Here we initialize all the tree's properties */
-        /** name, measure unit, value, addValue, speed, cap, color, hasButton, isSet */
-        this.addTreeValue("water", "l", 1, 0, 1 / 100000, 0, "_cyan", false, false);   
-        this.addTreeValue("sun_energy", "J", 1, 0, 0.001, 0, "_gold", true, false);   
-        this.addTreeValue("leaves", "", 5, 0, 1, 0, "", true, false);    
+        /** name, measure unit, cap, value, addValue, speed, color, hasButton, isSet */
+        this.addTreeValue("water", "l", 1, 0, 1 / 100000, 0, "_cyan", false, true);   
+        this.addActiveProperty("water", "l", 1, 0, 1 / 100000, "_cyan");   
+        this.addTreeValue("sun_energy", "J", 1, 0, 0.001, 0, "_gold", true, true);   
+        this.addActiveProperty("sun_energy", "J", 1, 0, 0.001, "_gold");  
+        
+        /** next ones are not initialized by default */
+        this.addTreeValue("leaves", "", 5, 0, 1, 0, "", true, false);   
     }
 
 
@@ -94,7 +98,7 @@ class DefaultScene extends Phaser.Scene {
     }
 
     /** Create, display and save in activeProperties a new bitmapText. Create also his button if needed */
-    addActiveProperty(name, value, cap, mUnit, addValue, color= "")
+    addActiveProperty(name, mUnit, cap, value, addValue, color= "")
     {
         activeProperties.push(this.add.bitmapText(  treePropertiesStartingWidth, 
                                                     treePropertiesStartingHeight += propertiesSpacing, 
@@ -156,7 +160,7 @@ class DefaultScene extends Phaser.Scene {
             {
                 case "stormy":  
                                 weatherFeedback.destroy();     
-                                weatherFeedback =this.add.bitmapText(innerWidth - 300 , 5, "retro", stormyFeedback, 15);
+                                weatherFeedback = this.add.bitmapText(innerWidth - 300 , 5, "retro", stormyFeedback, 15);
                                 treeVariables["water"].speed = 0.0005;
                     break;
                 case "rainy":   
@@ -183,9 +187,25 @@ class DefaultScene extends Phaser.Scene {
     {
         switch(name)
         {
-            case "leaves": if(treeVariables["sun_energy"].value >= 0.003){ return true;}
-                break;
-                default: return true;
+            case "leaves": return this.setWater();
+
+            default: return true;
+        }
+    }
+ 
+    /** -------------------------------------------------------- */
+    /** Next are functions for setting control of each property */
+    /** ------------------------------------------------------ */
+
+    setWater()
+    {
+        if(treeVariables["sun_energy"].value >= 0.003)
+        { 
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 }
